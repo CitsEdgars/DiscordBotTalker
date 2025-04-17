@@ -29,6 +29,20 @@ impl EventHandler for Handler {
 
         let cfg = self.config.lock().await;
 
+        let special_user_id = 181459240429420544;
+
+        if cfg.who_asked && msg.author.id.0 == special_user_id {    
+            // Respond with a GIF
+            if let Err(why) = msg.channel_id.send_message(&ctx.http, |m| {
+                m.content("")   //message potential
+                 .embed(|e| {
+                    e.image("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDFoYzEzeThzZWd4MG5iY293MnhkeXNwcng0ZXdzeGlsdDhyc3FmMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aT7Bec0LYoTowryv0B/giphy.gif")
+                  })
+            }).await {
+                println!("Failed to send gif: {:?}", why);
+            }
+        }
+
         let lowered = msg.content.to_lowercase();
         if cfg.zdr && ["hello", "zdr", "priv"].contains(&lowered.as_str()) {
             let _ = msg.reply(&ctx, "Zdarova Tovarisch! Clava Urainy!").await;

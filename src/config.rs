@@ -8,6 +8,7 @@ use tokio::sync::Mutex;
 pub struct FeatureConfig {
     pub preg: bool,
     pub zdr: bool,
+    pub who_asked: bool
 }
 
 impl Default for FeatureConfig {
@@ -15,6 +16,7 @@ impl Default for FeatureConfig {
         Self {
             preg: true,
             zdr: true,
+            who_asked: true
         }
     }
 }

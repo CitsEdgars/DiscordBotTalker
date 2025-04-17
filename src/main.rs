@@ -40,7 +40,7 @@ async fn main() {
         .expect("Error creating client");
 
     {
-        let mut data = client.data.write().await;
+        let mut data  = client.data.write().await;
         data.insert::<FeatureKey>(shared_config);
     }
 
