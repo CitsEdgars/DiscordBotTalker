@@ -45,7 +45,7 @@ impl EventHandler for Handler {
 
         let lowered = msg.content.to_lowercase();
         if cfg.zdr && ["hello", "zdr", "priv"].contains(&lowered.as_str()) {
-            let _ = msg.reply(&ctx, "Zdarova Tovarisch! Clava Urainy!").await;
+            let _ = msg.reply(&ctx, "Zdarova Tovarisch! Clava Ukrainy!").await;
         }
 
         if cfg.preg {

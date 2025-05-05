@@ -4,7 +4,9 @@ mod commands;
 
 use config::FeatureConfig;
 use handler::Handler;
+
 use commands::GENERAL_GROUP;
+use commands::ACTIVITIES_GROUP;
 
 use serenity::{
     prelude::*,
@@ -24,13 +26,12 @@ async fn main() {
 
     let config = FeatureConfig::load("features.json").unwrap_or_default();
     let shared_config = Arc::new(Mutex::new(config));
-
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("!"))
-        .group(&GENERAL_GROUP);
+        .group(&GENERAL_GROUP)
+        .group(&ACTIVITIES_GROUP);
 
     let handler = Handler::new(Arc::clone(&shared_config));
-
     let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::MESSAGE_CONTENT;
 
     let mut client = Client::builder(&token, intents)
