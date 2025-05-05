@@ -61,8 +61,8 @@ pub fn calculate_winnings(grid: &Vec<Vec<u8>>, lines_to_check: usize, bet: usize
 
     for (streak, symbol) in matches {
         if let Some(payouts) = PAYOUTS.get(symbol as usize) {
-            if let Some(amount) = payouts.get(streak - 3) {
-                total += amount * bet as usize;
+            if let Some(payout_coeff) = payouts.get(streak - 3) {
+                total += payout_coeff * bet as usize;
             }
         }
     }
