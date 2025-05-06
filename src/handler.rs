@@ -3,6 +3,7 @@ use serenity::{
     model::{channel::Message, gateway::Ready, channel::ReactionType},
     prelude::*,
 };
+use rand::{rng, Rng};
 
 use crate::config::SharedConfig;
 
@@ -48,7 +49,7 @@ impl EventHandler for Handler {
             let _ = msg.reply(&ctx, "Zdarova Tovarisch! Clava Ukrainy!").await;
         }
 
-        if cfg.preg {
+        if cfg.preg && get_chanced_occurence(0.05) {
             let emojis = [
                 ReactionType::Unicode("🫃".to_string()),
                 ReactionType::Unicode("🫃🏻".to_string()),
@@ -65,4 +66,10 @@ impl EventHandler for Handler {
             }
         }
     }
+}
+
+
+fn get_chanced_occurence(prob: f64) -> bool{
+    let mut rng = rng();
+    rng.random_bool(prob)
 }
