@@ -1,9 +1,11 @@
 pub mod general;
 pub mod activities;
+pub mod banking;
 pub mod helpers;
 
 use general::*;
 use activities::*;
+use banking::*;
 use serenity::framework::standard::macros::group;
 
 #[group]
@@ -14,10 +16,6 @@ use serenity::framework::standard::macros::group;
     
     // ,play
     // ,playlist
-    
-    // ,wallet
-    // ,transfer
-    // ,steal
 )]
 pub struct Activities;
 
@@ -28,3 +26,11 @@ pub struct Activities;
     ,test
 )]
 pub struct General;
+
+#[group]
+#[commands(
+    wallet
+    ,gain
+    ,transfer
+)]
+pub struct Banking;

@@ -1,4 +1,6 @@
-use regex::Regex;
+use rand::distr::weighted::WeightedIndex;
+use rand::distr::Distribution;
+use rand::rng;
 
 const LINES: [[usize; 5]; 10] = [
     [1, 1, 1, 1, 1],  // Line 0
@@ -26,37 +28,32 @@ const PAYOUTS: [[usize; 3]; 10] = [
     [5, 25, 100],
 ];
 
-pub fn parse_grid_from_filename(filename: &str) -> Option<Vec<Vec<u8>>> {
-    // Regex to find {...} groups of digits
-    let re = Regex::new(r"\{(\d),(\d),(\d)\}").ok()?;
-    let mut columns: Vec<[u8; 3]> = Vec::new();
+//TO-DO: read from file
+const DISTRIBUTION: [f64; 10] = [
+    0.007,  // Prob for 0
+    0.01,  // Prob for 1
+    0.008,  // Prob for 2
+    0.0125,  // Prob for 3
+    0.0125,  // Prob for 4
+    0.085,  // Prob for 5
+    0.085,  // Prob for 6
+    0.26,  // Prob for 7
+    0.26,  // Prob for 8
+    0.26  // Prob for 9
+];
 
-    for cap in re.captures_iter(filename) {
-        let col = [
-            cap[1].parse::<u8>().ok()?,
-            cap[2].parse::<u8>().ok()?,
-            cap[3].parse::<u8>().ok()?,
-        ];
-        columns.push(col);
-    }
-
-    if columns.len() != 5 {
-        return None;
-    }
-
-    // Transpose columns to rows
-    let mut grid: Vec<Vec<u8>> = vec![vec![0; 5]; 3];
-    for (col_idx, col) in columns.iter().enumerate() {
-        for (row_idx, &val) in col.iter().enumerate() {
-            grid[row_idx][col_idx] = val;
-        }
-    }
-
-    Some(grid)
+pub fn generate_grid(rows: usize, cols: usize) -> Vec<Vec<u8>> {
+    (0..rows)
+        .map(|_| {
+            (0..cols)
+                .map(|_| get_random_weighted_symbol())
+                .collect()
+        })
+        .collect()
 }
 
-pub fn calculate_winnings(grid: &Vec<Vec<u8>>, lines_to_check: usize, bet: usize) -> usize {
-    let matches = check_consecutive_matches(grid, &LINES[..lines_to_check], 2, 3);
+pub fn calculate_winnings(grid: &Vec<Vec<u8>>, lines_to_check: u32, bet: u32) -> usize {
+    let matches = check_consecutive_matches(grid, &LINES[..lines_to_check as usize], 2, 3);
     let mut total = 0;
 
     for (streak, symbol) in matches {
@@ -118,4 +115,10 @@ fn check_consecutive_matches(
     }
 
     results
+}
+
+fn get_random_weighted_symbol() -> u8 {
+    let dist = WeightedIndex::new(&DISTRIBUTION).unwrap();
+    let mut rng = rng();
+    dist.sample(&mut rng) as u8
 }

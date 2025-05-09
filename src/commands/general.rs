@@ -52,11 +52,12 @@ pub async fn toggle(ctx: &Context, msg: &Message, mut args: Args) -> CommandResu
 }
 
 #[command]
-async fn test(ctx: &Context, msg: &Message) -> CommandResult {
+async fn test(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     // Replace with your actual emoji name and ID
-    let custom_emoji = "<:yourEmojiName:812449197009272883>";
+    // msg.channel_id.say(&ctx.http, format!("Test emoji: {}", custom_emoji)).await?;
+    let irir = args.single::<String>().ok().unwrap();
 
-    msg.channel_id.say(&ctx.http, format!("Test emoji: {}", custom_emoji)).await?;
+    println!("{}", irir);
 
     Ok(())
 }
